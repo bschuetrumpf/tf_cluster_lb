@@ -8,7 +8,7 @@ variable "server_port" {
 
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
-  
+  availability_zones = ["us-east-2"]
   min_size = 2
   max_size = 10
   
