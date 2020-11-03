@@ -6,11 +6,6 @@ variable "server_port" {
   type = number
 }
 
-output "public_ip" {
-  value        = aws_instance.example.public_ip
-  description  = "Public IP address of Web Server"
-}
-
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
   
