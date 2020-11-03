@@ -6,9 +6,13 @@ variable "server_port" {
   type = number
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
-  availability_zones = ["us-east-2"]
+  availability_zones = data.aws_availability_zones.available.names
   min_size = 2
   max_size = 10
   
