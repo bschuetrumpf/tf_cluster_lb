@@ -1,6 +1,12 @@
 provider "aws" {
   region = "us-east-2"
 }
+#####OUTPUT
+output "alb_dns_name" {
+  value       = aws_lb.example.dns_name
+  description = "Domain name of Load Balancer"
+  }
+
 #####DATA
 variable "server_port" {
   type = number
@@ -14,7 +20,7 @@ data "aws_subnet_ids" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 ####SECURITY GROUPS
-resource "aws_security_group" {
+resource "aws_security_group" "alb" {
   name = "terraform-example-alb"
   
   ingress {
@@ -84,7 +90,20 @@ resource "aws_lb_target_group" {
     }
   }
 
-
+resource "aws_lb_listener_rule" "asg" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 100
+  
+  condition {
+    field  = "path-pattern"
+    values = ["*"]
+    }
+  
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.asg.arn
+    }
+  }
 
 ####AUTO-SCALING GROUP
 resource "aws_autoscaling_group" "example" {
