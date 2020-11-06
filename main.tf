@@ -73,7 +73,7 @@ resource "aws_lb_listener" "http" {
     }
   }
 
-resource "aws_lb_target_group" {
+resource "aws_lb_target_group" "asg" {
   name        = "terraform-asg-example"
   port        = var.server_port
   protocol    = "HTTP"
